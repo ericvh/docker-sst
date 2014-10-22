@@ -33,3 +33,4 @@ RUN ./configure --prefix=/sst/local/sst-4.0 --with-boost=/sst/local/packages/boo
 RUN make all
 RUN make install
 RUN echo "export PATH=/sst/local/sst-4.0/bin:\$PATH" >> ~/.bashrc
+WORKDIR /sst/local/sst-4.0/bin
