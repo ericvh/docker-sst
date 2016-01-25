@@ -30,7 +30,7 @@ RUN tar xfz sst-4.1.0.tar.gz && rm sst-4.1.0.tar.gz
 WORKDIR /sst/scratch/src/sst-4.1.0
 RUN ./autogen.sh
 RUN ./configure --prefix=/sst/local/sst-4.1.0 --with-boost=/sst/local/packages/boost-1.54
-RUN make all
+RUN make -j$(nproc) all
 RUN make install
 RUN echo "export PATH=/sst/local/sst-4.1/bin:\$PATH" >> ~/.bashrc
 WORKDIR /sst/local/sst-4.1.0/bin

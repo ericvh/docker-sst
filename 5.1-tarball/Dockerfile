@@ -33,7 +33,7 @@ RUN tar xfz sst-5.1.tar.gz && rm sst-5.1.tar.gz
 WORKDIR /sst/scratch/src/sst-5.1
 RUN ./autogen.sh
 RUN ./configure --prefix=/sst/local/sst-5.1 --with-boost=/sst/local/packages/boost-1.56
-RUN make -j4 all
+RUN make -j$(nproc) all
 RUN make install
 RUN echo "export PATH=/sst/local/sst-5.1/bin:\$PATH" >> ~/.bashrc
 WORKDIR /sst/local/sst-5.1/bin
