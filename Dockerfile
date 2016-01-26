@@ -1,13 +1,13 @@
-FROM gem5/sst-base:latest
-MAINTAINER Eric Van Hensberen <eric.vanhensbergen@arm.com>
-WORKDIR /sst/scratch/src/
-#RUN svn co --non-interactive --trust-server-cert https://www.sst-simulator.org/svn/sst/trunk/ sst
-RUN git clone --recursive https://github.com/sstsimulator/sst.git
-WORKDIR /sst/scratch/src/sst
-RUN git submodule foreach git checkout devel
-RUN ./autogen.sh
-RUN ./configure --prefix=/sst/local/sst --with-boost=/sst/local/packages/boost-1.56 --disable-mem-pools --enable-debug
-RUN make -j$(nproc) all
-RUN make install
-RUN echo "export PATH=/sst/local/sst/bin:\$PATH" >> ~/.bashrc
-WORKDIR /sst/local/sst/bin
+FROM gem5/sst-base:gem5-latest
+MAINTAINER Eric Van Hensbergen <eric.vanhensbergen@arm.com>
+RUN apt-get -y install pkg-config build-essential m4 scons zlib1g zlib1g-dev libprotobuf-dev protobuf-compiler libprotoc-dev libgoogle-perftools-dev swig python-dev python mercurial wget
+RUN apt-get clean
+WORKDIR /usr/local/src
+RUN hg clone http://repo.gem5.org/gem5
+# build it
+WORKDIR /usr/local/src/gem5
+ADD fix.patch /tmp/fix.patch
+RUN scons -j$(nproc) --ignore-style build/ARM/libgem5_opt.so
+ENV PKG_CONFIG_PATH /sst/local/sst/lib/pkgconfig
+RUN patch -p1 < /tmp/fix.patch
+RUN make -C ext/sst
