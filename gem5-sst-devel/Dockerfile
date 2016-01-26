@@ -48,6 +48,6 @@ RUN hg clone http://repo.gem5.org/gem5
 # build it
 WORKDIR /usr/local/src/gem5
 RUN scons -j$(nproc) --ignore-style build/ARM/libgem5_opt.so
-RUN export export PKG_CONFIG_PATH=/sst/local/sst/lib/pkgconfig
+ENV PKG_CONFIG_PATH /sst/local/sst/lib/pkgconfig
 RUN make -C ext/sst
 
